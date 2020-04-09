@@ -15,6 +15,7 @@
 #include <ext/standard/info.h>
 
 #include "circuit_breaker.h"
+#include "clocks.h"
 #include "comms_php.h"
 #include "compat_string.h"
 #include "compatibility.h"
@@ -426,6 +427,24 @@ static BOOL_T _parse_config_array(zval *config_array, zval **tracing_closure, ui
         return FALSE;
     }
     return TRUE;
+}
+
+static PHP_FUNCTION(ddtrace_monotonic_nsec) {
+    PHP5_UNUSED(ht, return_value_ptr, this_ptr, return_value_used TSRMLS_CC);
+    PHP7_UNUSED(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+    RETURN_LONG(ddtrace_monotonic_nsec());
+}
+
+static PHP_FUNCTION(ddtrace_monotonic_usec) {
+    PHP5_UNUSED(ht, return_value_ptr, this_ptr, return_value_used TSRMLS_CC);
+    PHP7_UNUSED(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+    RETURN_LONG(ddtrace_monotonic_usec());
+}
+
+static PHP_FUNCTION(ddtrace_realtime_nsec) {
+    PHP5_UNUSED(ht, return_value_ptr, this_ptr, return_value_used TSRMLS_CC);
+    PHP7_UNUSED(INTERNAL_FUNCTION_PARAM_PASSTHRU);
+    RETURN_LONG(ddtrace_realtime_nsec());
 }
 
 static PHP_FUNCTION(dd_trace) {
@@ -1052,6 +1071,9 @@ static const zend_function_entry ddtrace_functions[] = {
     DDTRACE_FE(dd_tracer_circuit_breaker_register_success, NULL),
     DDTRACE_FE(dd_untrace, NULL),
     DDTRACE_FE(dd_trace_compile_time_microseconds, arginfo_dd_trace_compile_time_microseconds),
+    DDTRACE_FE(ddtrace_monotonic_nsec, NULL),
+    DDTRACE_FE(ddtrace_monotonic_usec, NULL),
+    DDTRACE_FE(ddtrace_realtime_nsec, NULL),
     DDTRACE_FE_END};
 
 zend_module_entry ddtrace_module_entry = {STANDARD_MODULE_HEADER,
